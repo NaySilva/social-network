@@ -8,8 +8,28 @@ from rest_framework.reverse import reverse
 import json
 from posts.models import User, Post, Comment, Geo, Address
 from posts.serializers import UserSerializer, PostSerializer, CommentSerializer, UserDetailSerializer, \
-    PostDetailSerializer
+    PostDetailSerializer, AddressSerializer, GeoSerializer
 
+
+class GeoList(generics.ListCreateAPIView):
+    queryset = Geo.objects.all()
+    serializer_class = GeoSerializer
+    name = 'geo-list'
+
+class GeoDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Geo.objects.all()
+    serializer_class = GeoSerializer
+    name = 'geo-detail'
+
+class AddressList(generics.ListCreateAPIView):
+    queryset = Address.objects.all()
+    serializer_class = AddressSerializer
+    name = 'address-list'
+
+class AddressDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Address.objects.all()
+    serializer_class = AddressSerializer
+    name = 'address-detail'
 
 class UserList(generics.ListCreateAPIView):
     queryset = User.objects.all()

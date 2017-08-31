@@ -4,7 +4,25 @@ from rest_framework import serializers
 from posts.models import User, Post, Comment, Address, Geo
 
 
+class GeoSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Geo
+        fields = ('url', 'id', 'lat', 'lng')
+
+
+class AddressSerializer(serializers.ModelSerializer):
+
+    geo = GeoSerializer()
+
+    class Meta:
+        model = Address
+        fields = ('url', 'id', 'street', 'suite', 'city', 'zipcode', 'geo')
+
+
 class UserSerializer(serializers.ModelSerializer):
+
+    address = AddressSerializer()
 
     class Meta:
         model = User
@@ -43,24 +61,10 @@ class PostDetailSerializer(serializers.HyperlinkedModelSerializer):
 
 
 
-
-class AddressSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Address
-        fields = ('url', 'id', 'street', 'suite', 'city', 'zipcode', 'geo')
-
-
-class GeoSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Geo
-        fields = ('url', 'id', 'lat', 'log')
-
-
 class UserDetailSerializer(serializers.ModelSerializer):
 
     posts = PostSerializer(many=True, read_only=True)
+    address = AddressSerializer()
 
     class Meta:
         model = User

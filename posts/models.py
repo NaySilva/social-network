@@ -22,21 +22,27 @@ class Address(models.Model):
 
 
 
-class User(models.Model):
-    name = models.CharField(max_length=30)
-    username = models.CharField(max_length=30)
-    email = models.EmailField()
+class Perfil(models.Model):
+    user = models.ForeignKey('auth.User',default='1')
     address = models.ForeignKey(Address)
 
+    @property
+    def username(self):
+        return self.user.username
+
+    @property
+    def email(self):
+        return self.user.email
+
     def __str__(self):
-        return self.name
+        return self.user.username
 
 
 
 class Post(models.Model):
     title = models.CharField(max_length=120)
     body = models.TextField()
-    user = models.ForeignKey(User, related_name='posts')
+    perfil = models.ForeignKey(Perfil, related_name='posts')
 
     def __str__(self):
         return self.title
@@ -47,7 +53,7 @@ class Comment(models.Model):
     name = models.CharField(max_length=30)
     email = models.EmailField()
     body = models.TextField()
-    post = models.ForeignKey(Post, related_name='comments')
+    post = models.ForeignKey(Post, related_name='comments', on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name
